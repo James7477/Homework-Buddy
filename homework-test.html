@@ -246,6 +246,7 @@ function startHelp(){
  var text=$("assignment").value.trim(), subject=$("subject").value, task=$("task").value;
  if(mode==="lesson"&&!text){var topic=topics[grade][Number($("topic").value)||0];text="I need help with "+topic[1]+".";subject=topic[0];$("subject").value=subject}
  if(!text){$("entryStatus").textContent="Tell Buddy what the question says. You can type it even if you took a photo.";$("assignment").focus();return}
+ if(/Actual homework question:\s*$/i.test(text)){$("entryStatus").textContent="Now type or scan the actual textbook question after the book and page details. A page number alone cannot tell Buddy what it says.";$("assignment").focus();return}
  var m=subject==="math"?detectMath(text):null;
  current={text:text,subject:subject,task:task,math:m,grade:grade};hintsUsed=0;
  $("assignmentEcho").textContent=text;
