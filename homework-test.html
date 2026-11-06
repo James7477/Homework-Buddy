@@ -42,7 +42,7 @@ footer{color:#66738d;text-align:center;font-size:12px;padding:10px 0 28px;line-h
       <button class="mode" data-mode="voice" aria-pressed="false" type="button"><b>🎙️</b>Tell Buddy<small>Speak your question</small></button>
       <button class="mode" data-mode="lesson" aria-pressed="false" type="button"><b>📖</b>Find my lesson<small>Choose a skill</small></button>
     </div>
-    <div id="photoTools" hidden><label for="photoFile">Pick or take a picture of the worksheet</label><input id="photoFile" class="field" type="file" accept="image/*" capture="environment"><img id="photoPreview" alt="Your selected worksheet photo" hidden><p class="muted small">The picture stays in this browser session. Buddy cannot read writing from photos yet. Please also type the question underneath so Buddy can help.</p></div>
+    <div id="photoTools" hidden><label for="photoFile">Pick or take a picture of the worksheet</label><input id="photoFile" class="field" type="file" accept="image/*" capture="environment"><img id="photoPreview" alt="Your selected worksheet photo" hidden><div class="actions"><button id="scanBtn" class="secondary" type="button" disabled>🔎 Scan words from picture</button></div><div id="scanStatus" class="status" role="status" aria-live="polite">Choose a clear photo of printed homework, then tap Scan.</div><p class="muted small">Buddy can use free on-device OCR to read printed worksheet words. The scanner needs internet to download its engine. Handwriting and math symbols may scan badly: always check and correct the text.</p></div>
     <div id="voiceTools" hidden><div class="actions"><button id="speakBtn" class="secondary" type="button">🎙️ Start talking</button></div><div id="voiceStatus" class="status" role="status">Speech input depends on your phone/browser and may use its speech service. You can always type instead.</div></div>
     <div id="lessonTools" hidden><label for="topic">What are you learning?</label><select id="topic" class="field"></select><p class="muted small">These are suggested elementary skills, not exact textbook lesson numbers. You can type the teacher's exact assignment below.</p></div>
     <div class="grid2">
@@ -50,7 +50,7 @@ footer{color:#66738d;text-align:center;font-size:12px;padding:10px 0 28px;line-h
       <div><label for="task">What does the teacher want you to do?</label><select id="task" class="field"><option value="solve">Solve a question</option><option value="understand">Understand the lesson</option><option value="check">Check the work I tried</option><option value="write">Write or explain something</option></select></div>
     </div>
     <label for="assignment">What does the homework say?</label><textarea id="assignment" class="field" maxlength="2000" placeholder="Example: Mia has 14 apples and gives away 6. How many does she have left?"></textarea>
-    <p class="muted small">Don't include your full name, address, school ID, or passwords. Homework text and photos aren't uploaded or saved by this test page.</p>
+    <p class="muted small">Don't include your full name, address, school ID, or passwords. This test does not send homework to its own server. Scanning uses an OCR library downloaded from a third-party CDN; recognition runs in the browser. Voice dictation may use your browser's speech service.</p>
     <div class="actions"><button class="primary" id="helpBtn" type="button">Help me with my homework ✨</button><button class="outline" id="clearBtn" type="button">Start over</button></div><div id="entryStatus" role="status" class="status"></div>
   </section>
   <section id="coach" class="card" aria-labelledby="coachTitle" hidden>
@@ -64,14 +64,14 @@ footer{color:#66738d;text-align:center;font-size:12px;padding:10px 0 28px;line-h
     <div id="feedback" role="status" aria-live="polite" hidden></div>
     <div class="actions"><button id="readBtn" class="outline" type="button">🔊 Read Buddy's tip</button><a class="back" href="./index.html#learningZone">Try a practice game →</a></div>
   </section>
-  <details class="card"><summary style="font-size:18px;font-weight:900;cursor:pointer">👨‍👩‍👧 Parent Corner · How this works</summary><p class="muted">This test works as a guided homework coach. It can check simple typed arithmetic and offer age-appropriate thinking prompts in other subjects. It does not automatically know an assignment's correct answer, interpret photos, or connect to a teacher or school account. For reading, writing, science, and social studies, a parent or teacher may need to review the final answer.</p><p class="muted">No child registration, advertising, analytics, or external AI service is included. The selected grade may be saved on this device. The assignment text and picture are only kept while this page is open. Voice input, when available, may use the browser's speech service and require microphone permission. Nothing is posted to GitHub by using the page.</p><p class="muted">The suggested lesson categories are inspired by general Alabama elementary learning goals; they are not a reproduction of HMH, Open Court, STEMscopes, Studies Weekly, or any district-licensed material.</p></details>
+  <details class="card"><summary style="font-size:18px;font-weight:900;cursor:pointer">👨‍👩‍👧 Parent Corner · How this works</summary><p class="muted">This test works as a guided homework coach. It can scan printed text in photos, check simple typed arithmetic, and offer age-appropriate thinking prompts in other subjects. It does not automatically know an assignment's correct answer, reliably read handwriting, interpret diagrams, or connect to a teacher or school account. For reading, writing, science, and social studies, a parent or teacher may need to review the final answer.</p><p class="muted">No child registration, advertising, analytics, or external AI service is included. The selected grade may be saved on this device. Assignment text and photos stay in this browser session and are not sent to our server. On first scan, an external OCR library, worker, and language data are downloaded; recognition runs on the device. Voice input may use the browser's speech service and microphone permission. Nothing is posted to GitHub by using the page.</p><p class="muted">The suggested lesson categories are inspired by general Alabama elementary learning goals; they are not a reproduction of HMH, Open Court, STEMscopes, Studies Weekly, or any district-licensed material.</p></details>
 </main>
 <footer class="wrap">Homework Buddy · Homework First TEST · Free for families · Built to help kids think, not copy answers.</footer>
 <script>
 (function(){
 "use strict";
 var $=function(id){return document.getElementById(id)};
-var grade=2, mode="type", current=null, hintsUsed=0, recognition=null, previewUrl=null;
+var grade=2, mode="type", current=null, hintsUsed=0, recognition=null, previewUrl=null, scanning=false, scanToken=0, ocrScriptPromise=null;
 var topics={
 0:[["math","Count objects to 20"],["math","Add and subtract small numbers"],["reading","Letter sounds and rhyming"],["reading","Story characters"],["spelling","Write simple words"],["science","Living and nonliving things"],["social","Community helpers"]],
 1:[["math","Add and subtract within 20"],["math","Place value and tens"],["reading","Story beginning, middle and end"],["spelling","Spelling patterns"],["science","Plants and animals"],["social","Maps and neighborhoods"]],
@@ -190,8 +190,10 @@ function chooseOp(op){
  $("hintPanel").hidden=true;$("feedback").hidden=true;hintsUsed=0;
 }
 function reset(){
+ scanToken++;
  if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null}
  $("photoPreview").hidden=true;$("photoPreview").removeAttribute("src");$("photoFile").value="";
+ $("scanBtn").disabled=true;$("scanStatus").textContent="Choose a clear photo of printed homework, then tap Scan.";
  $("assignment").value="";$("studentWork").value="";$("entryStatus").textContent="";
  $("coach").hidden=true;current=null;hintsUsed=0;changeMode("type");$("assignment").focus();
 }
