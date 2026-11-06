@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#6556d8">
+<meta name="description" content="Homework Buddy Homework First test — a private, kid-friendly K–5 homework helper.">
+<title>Homework Buddy — Homework First TEST</title>
+<style>
+:root{font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;--ink:#263153;--purple:#6556d8;--muted:#61708d;--line:#dfe3f3;--bg:#f6f8ff}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:radial-gradient(circle at 8% 0,#e0e7ff,transparent 35%),radial-gradient(circle at 100% 0,#ffe9ef,transparent 38%),var(--bg);min-height:100vh}
+button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #f9bd40;outline-offset:3px}button:disabled{opacity:.5;cursor:not-allowed}
+.wrap{max-width:980px;margin:auto;padding:0 19px}.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 0 10px}
+.brand{font-size:22px;font-weight:1000;text-decoration:none;color:var(--ink)}.brand span{color:var(--purple)}.pill{font-size:12px;font-weight:900;padding:9px 12px;border-radius:99px;background:#eee9ff;color:#5543b6;white-space:nowrap}.back{font-size:13px;font-weight:900;color:#5145ad;text-decoration:none;background:white;padding:10px 12px;border-radius:14px;border:1px solid var(--line)}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 0 20px}.hero h1{font-size:clamp(32px,5.5vw,49px);line-height:1.12;letter-spacing:-1.4px;margin:6px 0 10px}.hero p{line-height:1.6;color:var(--muted);margin:0;max-width:670px}.owl{font-size:86px;flex:0 0 auto;filter:drop-shadow(0 10px 10px #6c59b722)}
+.card{background:#fff;border:1px solid var(--line);border-radius:25px;box-shadow:0 13px 35px #444b8e11;padding:25px;margin:0 0 17px}.eyebrow{font-weight:1000;letter-spacing:.065em;text-transform:uppercase;color:#6455cf;font-size:11px}.card h2{margin:7px 0 11px;font-size:23px;letter-spacing:-.5px}.muted{color:var(--muted);line-height:1.5}.small{font-size:12px;line-height:1.5}.step{border-radius:50%;background:#eae4ff;color:#5346b8;display:inline-grid;place-items:center;width:28px;height:28px;margin-right:8px;font-weight:1000;font-size:15px}
+.grade-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;margin-top:17px}.grade{border:2px solid var(--line);border-radius:15px;background:#fff;padding:14px 5px;font-weight:1000;min-height:58px;color:var(--ink)}.grade[aria-pressed="true"]{background:#ece7ff;border-color:var(--purple);color:#4536a4}
+.mode-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:17px}.mode{display:flex;flex-direction:column;align-items:center;gap:6px;background:#f9faff;border:2px solid var(--line);border-radius:17px;padding:16px 8px;min-height:105px;text-align:center;font-weight:900;color:var(--ink)}.mode b{font-size:26px}.mode small{font-size:12px;font-weight:800;color:var(--muted)}.mode[aria-pressed="true"]{background:#edeaff;border-color:#7667e2}
+label{font-weight:900;display:block;margin:16px 0 7px}.field{display:block;width:100%;border:2px solid #dfe2f0;border-radius:15px;padding:13px 14px;color:var(--ink);background:white}.field:focus{border-color:var(--purple)}textarea.field{min-height:120px;resize:vertical;line-height:1.55}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.primary,.secondary,.outline{border-radius:15px;padding:14px 20px;font-weight:950;min-height:49px}.primary{color:white;background:var(--purple);border:1px solid #5145b2;box-shadow:0 5px 0 #4b3caa}.secondary{background:#efeaff;border:1px solid #d8d0ff;color:#5344aa}.outline{background:white;border:1px solid var(--line);color:#4f5c7a}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}.hint{background:#fff8e6;border:1px solid #f1dfa8;border-radius:15px;padding:14px 16px;line-height:1.6;margin-top:13px}.reply{background:#ecf8f1;border:1px solid #b7e0c7;border-radius:15px;padding:15px 17px;line-height:1.65;margin-top:14px}.reply.warn{background:#fff3e7;border-color:#f2d2a5}.reply h3{margin:0 0 5px;font-size:18px}.reply p{margin:0;white-space:pre-line}
+.questionBox{background:#f5f4ff;padding:19px;border-radius:18px;border:1px solid #e2dcff;overflow-wrap:anywhere}.questionBox b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#5f54b0;margin-bottom:7px}.questionBox p{white-space:pre-wrap;line-height:1.55;margin:0;font-size:18px;font-weight:850}
+.pickops{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}.pickops button{background:#fff;border:2px solid #d7d4f4;padding:12px 19px;border-radius:13px;font-size:19px;font-weight:1000;color:#5344aa}.pickops button[aria-pressed="true"]{background:#e9e4ff;border-color:#7568df}
+#photoPreview{width:100%;max-height:270px;object-fit:contain;border-radius:15px;background:#f3f4fa;margin-top:13px}
+.status{font-size:13px;color:#5e6687;min-height:18px;margin-top:8px}
+.banner{background:#e8f8f2;border:1px solid #c3e5d7;border-radius:18px;padding:16px 18px;line-height:1.55;margin-bottom:17px;color:#315f4b}
+footer{color:#66738d;text-align:center;font-size:12px;padding:10px 0 28px;line-height:1.6}
+[hidden]{display:none!important}
+@media(max-width:670px){.wrap{padding:0 13px}.bar{flex-wrap:wrap}.brand{font-size:19px}.hero{padding:12px 0}.hero h1{font-size:32px}.owl{font-size:52px}.card{padding:18px 15px;border-radius:20px}.grade-grid{grid-template-columns:repeat(3,1fr)}.mode-grid{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.actions .primary,.actions .secondary,.actions .outline{flex:1 1 auto}.mode{min-height:98px}}
+</style>
+</head>
+<body>
+<header class="bar wrap"><a class="brand" href="./index.html" aria-label="Homework Buddy home">📚 Homework <span>Buddy</span></a><span class="pill">HOMEWORK FIRST · TEST</span><a href="./index.html" class="back">Practice Library</a></header>
+<main class="wrap">
+  <div class="hero"><div><div class="eyebrow">Hi, Buddy! 👋</div><h1>What homework did your teacher give you today?</h1><p>Show Buddy your real assignment. We'll work through it together, one step at a time. No rushing, no guessing, and no giving up!</p></div><div class="owl" aria-hidden="true">🦉</div></div>
+  <div class="banner"><strong>Made for Alabama K–5 learners.</strong> Homework comes first, and the original practice games are still available. This is an early test—not a school-approved textbook or a live AI tutor.</div>
+  <section class="card" aria-labelledby="gradeTitle"><div class="eyebrow">Step 1</div><h2 id="gradeTitle"><span class="step">1</span>What grade are you in?</h2><div id="grades" class="grade-grid" role="group" aria-label="Choose grade"></div></section>
+  <section class="card" aria-labelledby="modeTitle"><div class="eyebrow">Step 2</div><h2 id="modeTitle"><span class="step">2</span>How would you like to show Buddy?</h2>
+    <div class="mode-grid" role="group" aria-label="How to enter homework">
+      <button class="mode" data-mode="type" aria-pressed="true" type="button"><b>⌨️</b>Type it<small>Write the question</small></button>
+      <button class="mode" data-mode="photo" aria-pressed="false" type="button"><b>📸</b>Take a picture<small>Use your camera</small></button>
+      <button class="mode" data-mode="voice" aria-pressed="false" type="button"><b>🎙️</b>Tell Buddy<small>Speak your question</small></button>
+      <button class="mode" data-mode="lesson" aria-pressed="false" type="button"><b>📖</b>Find my lesson<small>Choose a skill</small></button>
+    </div>
+    <div id="photoTools" hidden><label for="photoFile">Pick or take a picture of the worksheet</label><input id="photoFile" class="field" type="file" accept="image/*" capture="environment"><img id="photoPreview" alt="Your selected worksheet photo" hidden><p class="muted small">The picture stays in this browser session. Buddy cannot read writing from photos yet. Please also type the question underneath so Buddy can help.</p></div>
+    <div id="voiceTools" hidden><div class="actions"><button id="speakBtn" class="secondary" type="button">🎙️ Start talking</button></div><div id="voiceStatus" class="status" role="status">Speech input depends on your phone/browser and may use its speech service. You can always type instead.</div></div>
+    <div id="lessonTools" hidden><label for="topic">What are you learning?</label><select id="topic" class="field"></select><p class="muted small">These are suggested elementary skills, not exact textbook lesson numbers. You can type the teacher's exact assignment below.</p></div>
+    <div class="grid2">
+      <div><label for="subject">What subject?</label><select id="subject" class="field"><option value="math">🔢 Math</option><option value="reading">📖 Reading / English</option><option value="spelling">✏️ Spelling / Writing</option><option value="science">🔬 Science</option><option value="social">🌎 Social Studies</option></select></div>
+      <div><label for="task">What does the teacher want you to do?</label><select id="task" class="field"><option value="solve">Solve a question</option><option value="understand">Understand the lesson</option><option value="check">Check the work I tried</option><option value="write">Write or explain something</option></select></div>
+    </div>
+    <label for="assignment">What does the homework say?</label><textarea id="assignment" class="field" maxlength="2000" placeholder="Example: Mia has 14 apples and gives away 6. How many does she have left?"></textarea>
+    <p class="muted small">Don't include your full name, address, school ID, or passwords. Homework text and photos aren't uploaded or saved by this test page.</p>
+    <div class="actions"><button class="primary" id="helpBtn" type="button">Help me with my homework ✨</button><button class="outline" id="clearBtn" type="button">Start over</button></div><div id="entryStatus" role="status" class="status"></div>
+  </section>
+  <section id="coach" class="card" aria-labelledby="coachTitle" hidden>
+    <div class="eyebrow">Step 3 · Let's figure it out</div><h2 id="coachTitle"><span class="step">3</span>Buddy's learning corner</h2>
+    <div class="questionBox"><b>Your assignment</b><p id="assignmentEcho"></p></div>
+    <div id="coachIntro" class="hint" aria-live="polite"></div>
+    <div id="opPicker" hidden><p class="muted"><strong>Word problem?</strong> Which operation do you think fits the story? Choose one to let Buddy check a number answer.</p><div class="pickops" id="opButtons" role="group" aria-label="Choose operation"><button type="button" data-op="+">+</button><button type="button" data-op="-">−</button><button type="button" data-op="*">×</button><button type="button" data-op="/">÷</button></div><p class="small muted">Buddy uses the first two numbers in the problem for this practice check. Confirm that those numbers and the operation really match the question.</p></div>
+    <div id="hintPanel" class="hint" hidden aria-live="polite"></div>
+    <label for="studentWork">What do <em>you</em> think the answer is?</label><textarea id="studentWork" class="field" rows="3" placeholder="Type your answer or describe your thinking here."></textarea>
+    <div class="actions"><button id="hintBtn" class="secondary" type="button">💡 Give me a hint</button><button id="checkBtn" class="primary" type="button">Check my work</button><button id="anotherBtn" class="outline" type="button">Try another question</button></div>
+    <div id="feedback" role="status" aria-live="polite" hidden></div>
+    <div class="actions"><button id="readBtn" class="outline" type="button">🔊 Read Buddy's tip</button><a class="back" href="./index.html#learningZone">Try a practice game →</a></div>
+  </section>
+  <details class="card"><summary style="font-size:18px;font-weight:900;cursor:pointer">👨‍👩‍👧 Parent Corner · How this works</summary><p class="muted">This test works as a guided homework coach. It can check simple typed arithmetic and offer age-appropriate thinking prompts in other subjects. It does not automatically know an assignment's correct answer, interpret photos, or connect to a teacher or school account. For reading, writing, science, and social studies, a parent or teacher may need to review the final answer.</p><p class="muted">No child registration, advertising, analytics, or external AI service is included. The selected grade may be saved on this device. The assignment text and picture are only kept while this page is open. Voice input, when available, may use the browser's speech service and require microphone permission. Nothing is posted to GitHub by using the page.</p><p class="muted">The suggested lesson categories are inspired by general Alabama elementary learning goals; they are not a reproduction of HMH, Open Court, STEMscopes, Studies Weekly, or any district-licensed material.</p></details>
+</main>
+<footer class="wrap">Homework Buddy · Homework First TEST · Free for families · Built to help kids think, not copy answers.</footer>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+var grade=2, mode="type", current=null, hintsUsed=0, recognition=null, previewUrl=null;
+var topics={
+0:[["math","Count objects to 20"],["math","Add and subtract small numbers"],["reading","Letter sounds and rhyming"],["reading","Story characters"],["spelling","Write simple words"],["science","Living and nonliving things"],["social","Community helpers"]],
+1:[["math","Add and subtract within 20"],["math","Place value and tens"],["reading","Story beginning, middle and end"],["spelling","Spelling patterns"],["science","Plants and animals"],["social","Maps and neighborhoods"]],
+2:[["math","Add and subtract within 100"],["math","Money and time"],["reading","Main idea and details"],["spelling","Sentence writing"],["science","Animal habitats"],["social","Communities and maps"]],
+3:[["math","Multiplication and division"],["math","Fractions"],["reading","Find text evidence"],["spelling","Write a paragraph"],["science","Forces and motion"],["social","Alabama geography"]],
+4:[["math","Multi-digit multiplication"],["math","Equivalent fractions"],["reading","Summarize a passage"],["spelling","Organize an essay"],["science","Energy and ecosystems"],["social","Alabama history"]],
+5:[["math","Decimals and fractions"],["math","Volume and measurement"],["reading","Compare ideas in texts"],["spelling","Opinion writing"],["science","Earth and space"],["social","U.S. history and geography"]]
+};
+var subjectLabels={math:"math",reading:"reading",spelling:"spelling",science:"science",social:"social studies"};
+var coachTips={
+math:["Read the question one more time. What is it asking you to find?","Underline the numbers. Which math idea could connect them?","Draw a picture, count with objects, or write a number sentence to show your plan."],
+reading:["Read the whole question first. Then find the part of the story that helps.","Who or what is this about? What happened in the text?","Find a sentence or detail from the passage to support your answer."],
+spelling:["Say the word or sentence slowly. What sounds do you hear?","Clap the syllables, then check each part of the word.","Read what you wrote aloud. Does it sound right and have capitals and punctuation?"],
+science:["What do you already know or observe about this topic?","Think about what changes, what stays the same, and why.","Use a fact, observation, or example to explain your idea."],
+social:["Think about who, what, when, and where.","Look for a clue on the map, timeline, or in the passage.","Explain how the place, person, or event connects to the question."]
+};
+function saveGrade(){try{localStorage.setItem("homeworkBuddy_homeworkTest_grade",String(grade))}catch(e){}}
+try{var stored=Number(localStorage.getItem("homeworkBuddy_homeworkTest_grade"));if(Number.isInteger(stored)&&stored>=0&&stored<=5)grade=stored}catch(e){}
+function renderGrades(){
+ $("grades").replaceChildren();
+ for(var g=0;g<=5;g++){(function(n){var b=document.createElement("button");b.type="button";b.className="grade";b.textContent=n===0?"Kindergarten":"Grade "+n;b.setAttribute("aria-pressed",String(grade===n));b.onclick=function(){grade=n;saveGrade();renderGrades();updateTopics()};$("grades").appendChild(b)})(g)}
+}
+function updateTopics(){
+ var list=$("topic");list.replaceChildren();
+ topics[grade].forEach(function(item,i){var o=document.createElement("option");o.value=String(i);o.textContent=item[1];list.appendChild(o)});
+ setLessonSubject();
+}
+function setLessonSubject(){var item=topics[grade][Number($("topic").value)||0];if(item)$("subject").value=item[0]}
+function changeMode(m){
+ mode=m;
+ document.querySelectorAll("[data-mode]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.mode===m))});
+ $("photoTools").hidden=m!=="photo";$("voiceTools").hidden=m!=="voice";$("lessonTools").hidden=m!=="lesson";
+ if(m==="lesson")setLessonSubject();
+ $("entryStatus").textContent="";
+}
+function numberFmt(n){return Number.isInteger(n)?String(n):String(Math.round(n*100000)/100000)}
+function calc(a,b,op){if(op==="+")return a+b;if(op==="-")return a-b;if(op==="*")return a*b;if(op==="/"&&b!==0)return a/b;return null}
+function detectMath(text){
+ var expression=text.match(/(-?\d+(?:\.\d+)?)\s*(\+|\-|x|×|\*|÷|\/)\s*(-?\d+(?:\.\d+)?)/i);
+ if(expression){var op=expression[2].toLowerCase();if(op==="x"||op==="×")op="*";if(op==="÷")op="/";var a=Number(expression[1]),b=Number(expression[3]),answer=calc(a,b,op);if(Number.isFinite(answer))return {a:a,b:b,op:op,answer:answer,chosen:true}}
+ var values=(text.match(/\b\d+(?:\.\d+)?\b/g)||[]).map(Number);
+ if(values.length===2&&values.every(Number.isFinite))return {a:values[0],b:values[1],op:null,answer:null,chosen:false};
+ return null;
+}
+function operationName(op){return {"+":"add","-":"subtract","*":"multiply","/":"divide"}[op]||"solve"}
+function mathHint(m,round){
+ if(!m||!m.op)return round===0?"What is the story asking you to find? Is the amount getting bigger, smaller, or split into equal groups?":"Pick an operation you think fits, and draw a picture of the story.";
+ if(m.op==="+")return round===0?"Try adding "+numberFmt(m.a)+" and "+numberFmt(m.b)+". Count on from the larger number.":"Group tens with tens and ones with ones, then combine. Check your total.";
+ if(m.op==="-")return round===0?"Start with "+numberFmt(m.a)+" and take away "+numberFmt(m.b)+". A number line might help.":"Try counting up from "+numberFmt(m.b)+" to "+numberFmt(m.a)+" or make a subtraction picture.";
+ if(m.op==="*")return round===0?"Imagine "+numberFmt(m.a)+" groups with "+numberFmt(m.b)+" in each group.":"Try repeated addition or skip-counting to find the total.";
+ return round===0?"Think about sharing "+numberFmt(m.a)+" into "+numberFmt(m.b)+" equal groups.":"How many are in each group? Try multiplication to check your answer.";
+}
+function introFor(subject,task,m){
+ if(subject==="math"&&m&&m.op)return "Let's solve this step by step. First decide what the numbers and operation mean. Try it yourself, then Buddy can check your number answer.";
+ if(subject==="math"&&m)return "I found two numbers in your question. You choose the operation that fits the story. Buddy won't guess what your teacher meant.";
+ if(task==="check")return "Show me what you tried first. Buddy will ask some questions to help you review it. For written answers, a grown-up may need to check accuracy.";
+ if(task==="write")return "Make a little plan: first say your idea, then give an example or reason, and finally reread what you wrote.";
+ if(subject==="reading")return "Read the assignment carefully. Look for clues in the passage and tell Buddy what you think.";
+ if(subject==="spelling")return "Let's sound it out and work through the writing. You try first!";
+ if(subject==="science")return "Let's be scientists! Think about what you observe and what evidence you can use.";
+ if(subject==="social")return "Let's investigate! Look for people, places, dates, or map clues that help.";
+ return "We'll figure out what your teacher is asking, one small step at a time.";
+}
+function startHelp(){
+ var text=$("assignment").value.trim(), subject=$("subject").value, task=$("task").value;
+ if(mode==="lesson"&&!text){var topic=topics[grade][Number($("topic").value)||0];text="I need help with "+topic[1]+".";subject=topic[0];$("subject").value=subject}
+ if(!text){$("entryStatus").textContent="Tell Buddy what the question says. You can type it even if you took a photo.";$("assignment").focus();return}
+ var m=subject==="math"?detectMath(text):null;
+ current={text:text,subject:subject,task:task,math:m,grade:grade};hintsUsed=0;
+ $("assignmentEcho").textContent=text;
+ $("coachIntro").textContent=introFor(subject,task,m);
+ $("studentWork").value="";
+ $("hintPanel").hidden=true;$("feedback").hidden=true;
+ $("opPicker").hidden=!(subject==="math"&&m&&!m.op);
+ document.querySelectorAll("[data-op]").forEach(function(b){b.setAttribute("aria-pressed","false")});
+ $("coach").hidden=false;
+ $("entryStatus").textContent="Great! Your question is ready below.";
+ $("coach").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function hint(){
+ if(!current)return;
+ var tips=coachTips[current.subject]||coachTips.math;
+ var tip=current.subject==="math"?mathHint(current.math,hintsUsed):tips[Math.min(hintsUsed,tips.length-1)];
+ $("hintPanel").textContent="💡 Buddy's hint "+String(hintsUsed+1)+": "+tip;
+ $("hintPanel").hidden=false;hintsUsed++;
+}
+function feedback(title,body,warn){
+ var box=$("feedback");box.hidden=false;box.className=warn?"reply warn":"reply";
+ box.replaceChildren();var h=document.createElement("h3"),p=document.createElement("p");
+ h.textContent=title;p.textContent=body;box.append(h,p);
+}
+function check(){
+ if(!current)return;
+ var work=$("studentWork").value.trim();
+ if(!work){feedback("Give it a try!","Type your answer or explain your thinking first. Buddy will help after you try.",true);$("studentWork").focus();return}
+ var m=current.math;
+ if(current.subject==="math"&&m&&m.op&&m.answer!==null){
+  var cleaned=work.replace(/,/g,"").trim();var matches=cleaned.match(/[-+]?\d+(?:\.\d+)?/g)||[];
+  if(matches.length!==1){feedback("Let's check the number","For this simple arithmetic check, enter just one number (like 14 or 3.5). Buddy cannot yet verify full written steps.",true);return}
+  var student=Number(matches[0]);
+  if(Number.isFinite(student)&&Math.abs(student-m.answer)<0.000001){
+   feedback("🎉 You did the thinking!","That number checks out for "+numberFmt(m.a)+" "+({"+":"+","-":"−","*":"×","/":"÷"}[m.op])+" "+numberFmt(m.b)+".\nNow explain how you got your answer. That's how you know you've learned it!",false);
+  }else{
+   feedback("Good try — let's check our steps","Take another look. "+mathHint(m,Math.min(hintsUsed,1))+"\nRemember, it's okay to try again!",true);
+  }
+ }else{
+  var tip=coachTips[current.subject][Math.min(hintsUsed,2)];
+  feedback("Nice work putting your thoughts down!","Buddy can't automatically grade this kind of answer yet. Check: "+tip+"\nTry reading your answer out loud, then compare it with the book or ask a parent or teacher to review.",false);
+ }
+}
+function chooseOp(op){
+ if(!current||!current.math)return;
+ var m=current.math;m.op=op;m.answer=calc(m.a,m.b,op);m.chosen=true;
+ document.querySelectorAll("[data-op]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.op===op))});
+ $("coachIntro").textContent="You chose to "+operationName(op)+" "+numberFmt(m.a)+" and "+numberFmt(m.b)+". Check that this matches the story, then solve it yourself!";
+ $("hintPanel").hidden=true;$("feedback").hidden=true;hintsUsed=0;
+}
+function reset(){
+ if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null}
+ $("photoPreview").hidden=true;$("photoPreview").removeAttribute("src");$("photoFile").value="";
+ $("assignment").value="";$("studentWork").value="";$("entryStatus").textContent="";
+ $("coach").hidden=true;current=null;hintsUsed=0;changeMode("type");$("assignment").focus();
+}
+document.querySelectorAll("[data-mode]").forEach(function(b){b.onclick=function(){changeMode(b.dataset.mode)}});
+$("topic").onchange=setLessonSubject;
+$("helpBtn").onclick=startHelp;$("hintBtn").onclick=hint;$("checkBtn").onclick=check;$("anotherBtn").onclick=reset;$("clearBtn").onclick=reset;
+document.querySelectorAll("[data-op]").forEach(function(b){b.onclick=function(){chooseOp(b.dataset.op)}});
+$("photoFile").onchange=function(){
+ var file=this.files&&this.files[0];if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null}
+ if(!file){$("photoPreview").hidden=true;return}
+ if(!file.type.startsWith("image/")){$("entryStatus").textContent="Please choose an image file.";return}
+ previewUrl=URL.createObjectURL(file);$("photoPreview").src=previewUrl;$("photoPreview").hidden=false;
+ $("entryStatus").textContent="Picture ready! Please type the question so Buddy can help.";
+};
+$("speakBtn").onclick=function(){
+ var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){$("voiceStatus").textContent="Voice input isn't supported in this browser. Please type your homework below.";return}
+ if(recognition){try{recognition.stop()}catch(e){}}
+ recognition=new SR();recognition.lang="en-US";recognition.interimResults=false;recognition.maxAlternatives=1;
+ recognition.onresult=function(e){var said=e.results[0][0].transcript;$("assignment").value=($("assignment").value+" "+said).trim();$("voiceStatus").textContent="Heard: "+said+". Please check the words before continuing.";recognition=null};
+ recognition.onerror=function(e){$("voiceStatus").textContent="Voice input couldn't finish ("+e.error+"). You can type instead.";recognition=null};
+ recognition.onend=function(){if(recognition)$("voiceStatus").textContent="Stopped listening. If nothing appeared, please type instead.";recognition=null};
+ try{recognition.start();$("voiceStatus").textContent="Listening... Say the homework question."}catch(e){$("voiceStatus").textContent="Microphone wasn't available. Please type instead.";recognition=null}
+};
+$("readBtn").onclick=function(){
+ if(!("speechSynthesis" in window)){feedback("Read aloud unavailable","Your browser doesn't support reading this tip aloud.",true);return}
+ var text=$("hintPanel").hidden?$("coachIntro").textContent:$("hintPanel").textContent;
+ try{window.speechSynthesis.cancel();var msg=new SpeechSynthesisUtterance(text);msg.lang="en-US";msg.rate=.9;window.speechSynthesis.speak(msg)}catch(e){}
+};
+renderGrades();updateTopics();changeMode("type");
+})();
+</script>
+</body>
+</html>
