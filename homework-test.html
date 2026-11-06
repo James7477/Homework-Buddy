@@ -201,13 +201,72 @@ document.querySelectorAll("[data-mode]").forEach(function(b){b.onclick=function(
 $("topic").onchange=setLessonSubject;
 $("helpBtn").onclick=startHelp;$("hintBtn").onclick=hint;$("checkBtn").onclick=check;$("anotherBtn").onclick=reset;$("clearBtn").onclick=reset;
 document.querySelectorAll("[data-op]").forEach(function(b){b.onclick=function(){chooseOp(b.dataset.op)}});
+
 $("photoFile").onchange=function(){
- var file=this.files&&this.files[0];if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null}
- if(!file){$("photoPreview").hidden=true;return}
- if(!file.type.startsWith("image/")){$("entryStatus").textContent="Please choose an image file.";return}
+ scanToken++;
+ var file=this.files&&this.files[0];
+ if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null}
+ $("scanBtn").disabled=(!file||scanning);
+ if(!file){$("photoPreview").hidden=true;$("scanStatus").textContent="Choose a clear photo of printed homework, then tap Scan.";return}
+ if(!file.type.startsWith("image/")){$("entryStatus").textContent="Please choose an image file.";$("scanBtn").disabled=true;return}
+ if(file.size>12*1024*1024){$("entryStatus").textContent="This photo is too large (over 12 MB). Try a smaller photo.";$("scanBtn").disabled=true;return}
  previewUrl=URL.createObjectURL(file);$("photoPreview").src=previewUrl;$("photoPreview").hidden=false;
- $("entryStatus").textContent="Picture ready! Please type the question so Buddy can help.";
+ $("entryStatus").textContent="Picture ready! Tap Scan to read the printed question.";
+ $("scanStatus").textContent="Ready to scan printed words. Make sure the page is bright and flat.";
 };
+function loadOCR(){
+ if(window.Tesseract&&typeof window.Tesseract.createWorker==="function")return Promise.resolve();
+ if(ocrScriptPromise)return ocrScriptPromise;
+ ocrScriptPromise=new Promise(function(resolve,reject){
+  var script=document.createElement("script");
+  script.src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+  script.async=true;
+  script.onload=function(){if(window.Tesseract&&typeof window.Tesseract.createWorker==="function")resolve();else reject(new Error("OCR engine unavailable"))};
+  script.onerror=function(){reject(new Error("Could not download the scanner. Check your internet connection."))};
+  document.head.appendChild(script);
+ }).catch(function(error){ocrScriptPromise=null;throw error});
+ return ocrScriptPromise;
+}
+function updateScanStatus(message){$("scanStatus").textContent=message}
+async function scanPicture(){
+ if(scanning)return;
+ var file=$("photoFile").files&&$("photoFile").files[0];
+ if(!file){updateScanStatus("Choose a photo first.");return}
+ if(!file.type.startsWith("image/")||file.size>12*1024*1024){updateScanStatus("Please choose an image under 12 MB.");return}
+ var myToken=++scanToken, worker=null;
+ scanning=true;$("scanBtn").disabled=true;$("scanBtn").textContent="🔎 Scanning...";
+ updateScanStatus("Getting the text scanner ready. First use needs internet...");
+ try{
+  await loadOCR();
+  if(myToken!==scanToken)return;
+  worker=await window.Tesseract.createWorker("eng",1,{logger:function(m){
+   if(myToken!==scanToken)return;
+   if(m.status==="recognizing text")updateScanStatus("Reading worksheet... "+Math.round((m.progress||0)*100)+"%");
+   else if(m.status)updateScanStatus("Scanner: "+m.status.replace(/_/g," "));
+  }});
+  if(myToken!==scanToken)return;
+  updateScanStatus("Reading words from your picture...");
+  var output=await worker.recognize(file);
+  if(myToken!==scanToken)return;
+  var scanned=String((output&&output.data&&output.data.text)||"").trim();
+  if(!scanned){updateScanStatus("I couldn't read printed words. Try a brighter, closer photo or type the question.");return}
+  var box=$("assignment");
+  var combined=box.value.trim()?box.value.trim()+"\n"+scanned:scanned;
+  var clipped=combined.length>2000;
+  box.value=combined.slice(0,2000);
+  updateScanStatus("✅ Text scanned! Review it for mistakes"+(clipped?" (long page shortened)":"")+", then tap Help me with my homework.");
+  $("entryStatus").textContent="Your scanned words are in the homework box. Check numbers and signs carefully.";
+  box.focus();
+ }catch(error){
+  if(myToken===scanToken)updateScanStatus("Scanner couldn't finish: "+(error&&error.message?error.message:"Please try another photo or type the question.")+" You can still type your homework.");
+ }finally{
+  if(worker)try{await worker.terminate()}catch(e){}
+  scanning=false;
+  $("scanBtn").textContent="🔎 Scan words from picture";
+  $("scanBtn").disabled=!($("photoFile").files&&$("photoFile").files[0]);
+ }
+}
+$("scanBtn").onclick=scanPicture;
 $("speakBtn").onclick=function(){
  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
  if(!SR){$("voiceStatus").textContent="Voice input isn't supported in this browser. Please type your homework below.";return}
