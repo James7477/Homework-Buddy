@@ -42,7 +42,7 @@ footer{color:#66738d;text-align:center;font-size:12px;padding:10px 0 28px;line-h
       <button class="mode" data-mode="voice" aria-pressed="false" type="button"><b>🎙️</b>Tell Buddy<small>Speak your question</small></button>
       <button class="mode" data-mode="lesson" aria-pressed="false" type="button"><b>📖</b>Find my lesson<small>Choose a skill</small></button>
     </div>
-    <div id="photoTools" hidden><label for="photoFile">Pick or take a picture of the worksheet</label><input id="photoFile" class="field" type="file" accept="image/*" capture="environment"><img id="photoPreview" alt="Your selected worksheet photo" hidden><div class="actions"><button id="scanBtn" class="secondary" type="button" disabled>🔎 Scan words from picture</button></div><div id="scanStatus" class="status" role="status" aria-live="polite">Choose a clear photo of printed homework, then tap Scan.</div><p class="muted small">Buddy can use free on-device OCR to read printed worksheet words. The scanner needs internet to download its engine. Handwriting and math symbols may scan badly: always check and correct the text.</p></div>
+    <div id="photoTools" hidden><label for="photoFile">Pick or take a picture of the worksheet</label><input id="photoFile" class="field" type="file" accept="image/*" capture="environment"><img id="photoPreview" alt="Your selected worksheet photo" hidden><div class="actions"><button id="scanBtn" class="secondary" type="button" disabled>🔎 Scan words from picture</button></div><div id="scanStatus" class="status" role="status" aria-live="polite">Choose a clear photo of printed homework, then tap Scan.</div><p class="muted small">Buddy can use free on-device OCR to read printed worksheet words. The scanner needs internet to download its engine. Handwriting and math symbols may scan badly: always check and correct the text. For a whole worksheet, keep just one question at a time in the homework box.</p></div>
     <div id="voiceTools" hidden><div class="actions"><button id="speakBtn" class="secondary" type="button">🎙️ Start talking</button></div><div id="voiceStatus" class="status" role="status">Speech input depends on your phone/browser and may use its speech service. You can always type instead.</div></div>
     <div id="lessonTools" hidden><label for="topic">What are you learning?</label><select id="topic" class="field"></select><p class="muted small">These are suggested elementary skills, not exact textbook lesson numbers. You can type the teacher's exact assignment below.</p></div>
     <div class="grid2">
@@ -254,7 +254,7 @@ async function scanPicture(){
   var combined=box.value.trim()?box.value.trim()+"\n"+scanned:scanned;
   var clipped=combined.length>2000;
   box.value=combined.slice(0,2000);
-  updateScanStatus("✅ Text scanned! Review it for mistakes"+(clipped?" (long page shortened)":"")+", then tap Help me with my homework.");
+  updateScanStatus("✅ Scan finished! Check the words and numbers, keep one question at a time"+(clipped?" (long page shortened)":"")+", then tap Help me with my homework.");
   $("entryStatus").textContent="Your scanned words are in the homework box. Check numbers and signs carefully.";
   box.focus();
  }catch(error){
