@@ -89,7 +89,7 @@ science:["What do you already know or observe about this topic?","Think about wh
 social:["Think about who, what, when, and where.","Look for a clue on the map, timeline, or in the passage.","Explain how the place, person, or event connects to the question."]
 };
 function saveGrade(){try{localStorage.setItem("homeworkBuddy_homeworkTest_grade",String(grade))}catch(e){}}
-try{var stored=Number(localStorage.getItem("homeworkBuddy_homeworkTest_grade"));if(Number.isInteger(stored)&&stored>=0&&stored<=5)grade=stored}catch(e){}
+try{var raw=localStorage.getItem("homeworkBuddy_homeworkTest_grade");if(raw!==null){var stored=Number(raw);if(Number.isInteger(stored)&&stored>=0&&stored<=5)grade=stored}}catch(e){}
 function renderGrades(){
  $("grades").replaceChildren();
  for(var g=0;g<=5;g++){(function(n){var b=document.createElement("button");b.type="button";b.className="grade";b.textContent=n===0?"Kindergarten":"Grade "+n;b.setAttribute("aria-pressed",String(grade===n));b.onclick=function(){grade=n;saveGrade();renderGrades();updateTopics()};$("grades").appendChild(b)})(g)}
