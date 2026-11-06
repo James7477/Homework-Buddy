@@ -13,9 +13,9 @@ For now, you can also download `index.html` and open it in a browser, even witho
 Try the separate, mobile-friendly **Homework First** test at:
 **https://james7477.github.io/Homework-Buddy/homework-test.html**
 
-This page asks children for the **actual assignment** rather than immediately serving preset practice questions. Features include grade K–5 selection, subject and task selection, typed homework, an optional worksheet photo preview (no photo OCR), optional browser speech input, grade-level lesson suggestions, gentle hints, and a simple arithmetic answer checker. Other subjects provide guided questions rather than automated grading. This is an offline-friendly static prototype and **not an AI tutor, school login, or a replacement for the child's teacher**.
+This page asks children for the **actual assignment** rather than immediately serving preset practice questions. Features include grade K–5 selection, subject and task selection, typed homework, a worksheet photo scanner with free in-browser OCR for printed text (internet needed to load the OCR engine), optional browser speech input, grade-level lesson suggestions, gentle hints, and a simple arithmetic answer checker. Other subjects provide guided questions rather than automated grading. This is an offline-friendly static prototype and **not an AI tutor, school login, or a replacement for the child's teacher**.
 
-No assignment, picture, or voice recording is sent to our server; photos stay in the tab's memory, typed work is not stored by this test page, and only grade selection may be stored locally. Browser speech recognition may use the browser provider's online service. The existing `index.html` practice app is unchanged.
+No assignment or picture is sent to a Homework Buddy server. The scanner downloads Tesseract.js and its worker/language files from a CDN, then recognizes printed text in the browser. Photos remain in the tab's memory; typed work is not stored by this test page; only grade selection may be stored locally. OCR works best for clear printed text, not handwriting or diagrams; always verify numbers and symbols. Browser speech recognition may use the browser provider's online service. The existing `index.html` practice app is unchanged.
 
 ## Features in test v0.1
 - Choose **Kindergarten, Grade 1, Grade 2, Grade 3, Grade 4, or Grade 5**
