@@ -60,6 +60,46 @@ footer{color:#66738d;text-align:center;font-size:12px;padding:10px 0 28px;line-h
     <p class="small muted" style="margin:12px 0 0">Source: MCPSS's posted 2024 elementary curriculum documents and the Alabama Learning Exchange. This app is independent, not affiliated with or endorsed by MCPSS.</p>
   </section>
 
+
+  <section class="card" id="bookFinder" aria-labelledby="bookFinderTitle">
+    <div class="eyebrow">School books · New in test</div>
+    <h2 id="bookFinderTitle">📚 Find My Textbook Homework</h2>
+    <p class="muted">Choose the book your teacher uses. Enter the module, lesson, page, or problem number, then open its official online book with your school account. Buddy will help with the <strong>specific question</strong> you type or scan.</p>
+    <label for="bookChoice">Which school book?</label>
+    <select id="bookChoice" class="field">
+      <option value="math">HMH Into Math — Math</option>
+      <option value="reading">Open Court Reading — Reading &amp; Writing</option>
+      <option value="science">STEMscopes — Science</option>
+      <option value="social">Studies Weekly — Social Studies</option>
+      <option value="other">Different textbook or teacher worksheet</option>
+    </select>
+    <div id="bookCustomWrap" hidden>
+      <label for="bookCustom">Name on your book</label>
+      <input id="bookCustom" class="field" type="text" maxlength="120" placeholder="Example: My reading workbook">
+    </div>
+    <div class="grid2">
+      <div><label for="bookUnit">Unit, module, or week</label><input id="bookUnit" class="field" type="text" maxlength="80" placeholder="Example: Module 3 / Week 5"></div>
+      <div><label for="bookLesson">Lesson or story</label><input id="bookLesson" class="field" type="text" maxlength="120" placeholder="Example: Lesson 4 — Fractions"></div>
+    </div>
+    <div class="grid2">
+      <div><label for="bookPage">Page</label><input id="bookPage" class="field" type="text" maxlength="20" placeholder="Example: 37"></div>
+      <div><label for="bookProblem">Problem or question number</label><input id="bookProblem" class="field" type="text" maxlength="30" placeholder="Example: #6"></div>
+    </div>
+    <div class="questionBox" style="margin-top:15px">
+      <b>Online textbook access</b>
+      <p id="bookOnlineInfo" style="font-size:15px;font-weight:650"></p>
+      <div class="actions">
+        <a id="bookLoginLink" class="back" href="https://www.hmhco.com/ui/login" target="_blank" rel="noopener noreferrer">Open official online book ↗</a>
+      </div>
+      <p class="small muted" id="bookPrivacyNote" style="margin-top:11px">Use your school's own login. Never enter school passwords into Homework Buddy.</p>
+    </div>
+    <div class="actions">
+      <button id="prepareBookBtn" type="button" class="primary">✏️ Work on this book question</button>
+      <button id="photoBookBtn" type="button" class="secondary">📸 Scan a page instead</button>
+    </div>
+    <div id="bookStatus" role="status" aria-live="polite" class="status"></div>
+    <p class="small muted">Important: This is a <strong>book and lesson locator</strong>, not a searchable copy of the publisher's textbook. Complete pages and assignments often require school access. Buddy can't fetch or invent a textbook problem from a page number alone. The 2024 MCPSS program listings may differ from what an individual classroom uses now.</p>
+  </section>
   <section class="card" aria-labelledby="modeTitle"><div class="eyebrow">Step 2</div><h2 id="modeTitle"><span class="step">2</span>How would you like to show Buddy?</h2>
     <div class="mode-grid" role="group" aria-label="How to enter homework">
       <button class="mode" data-mode="type" aria-pressed="true" type="button"><b>⌨️</b>Type it<small>Write the question</small></button>
@@ -159,7 +199,7 @@ function saveGrade(){try{localStorage.setItem("homeworkBuddy_homeworkTest_grade"
 try{var raw=localStorage.getItem("homeworkBuddy_homeworkTest_grade");if(raw!==null){var stored=Number(raw);if(Number.isInteger(stored)&&stored>=0&&stored<=5)grade=stored}}catch(e){}
 function renderGrades(){
  $("grades").replaceChildren();
- for(var g=0;g<=5;g++){(function(n){var b=document.createElement("button");b.type="button";b.className="grade";b.textContent=n===0?"Kindergarten":"Grade "+n;b.setAttribute("aria-pressed",String(grade===n));b.onclick=function(){grade=n;saveGrade();renderGrades();updateTopics();renderSchoolGuide()};$("grades").appendChild(b)})(g)}
+ for(var g=0;g<=5;g++){(function(n){var b=document.createElement("button");b.type="button";b.className="grade";b.textContent=n===0?"Kindergarten":"Grade "+n;b.setAttribute("aria-pressed",String(grade===n));b.onclick=function(){grade=n;saveGrade();renderGrades();updateTopics();renderSchoolGuide();showBookChoice()};$("grades").appendChild(b)})(g)}
 }
 function updateTopics(){
  var list=$("topic");list.replaceChildren();
@@ -349,8 +389,51 @@ $("readBtn").onclick=function(){
  var text=$("hintPanel").hidden?$("coachIntro").textContent:$("hintPanel").textContent;
  try{window.speechSynthesis.cancel();var msg=new SpeechSynthesisUtterance(text);msg.lang="en-US";msg.rate=.9;window.speechSynthesis.speak(msg)}catch(e){}
 };
+
+var bookCatalog={
+ math:{title:"HMH Into Math",subject:"math",url:"https://www.hmhco.com/ui/login",link:"Open HMH Ed student login ↗",note:"On HMH Ed, use Discover to choose Into Math and navigate your modules and lessons, or Assignments for teacher-assigned work. Your school may instead use its single sign-on portal."},
+ reading:{title:"Open Court Reading",subject:"reading",url:"https://my.mheducation.com/",link:"Open McGraw Hill student login ↗",note:"Use your authorized McGraw Hill K–12 student account (or your school's login portal). Available books and assignments depend on your class."},
+ science:{title:"STEMscopes",subject:"science",url:"https://login.acceleratelearning.com/",link:"STEMscopes sign-in instructions ↗",note:"STEMscopes requires your school's unique district login URL. Ask the teacher for the correct district link; this publisher page explains that requirement."},
+ social:{title:"Studies Weekly",subject:"social",url:"https://online.studiesweekly.com/",link:"Open Studies Weekly Online ↗",note:"Sign in using your teacher-provided username, QR code, or school-supported login. Look for your assigned week or publication."},
+ other:{title:"your textbook",subject:"",url:"",link:"",note:"This book isn't in our publisher directory yet. Follow your teacher's directions to open it, and bring the question back here."}
+};
+function showBookChoice(){
+ var key=$("bookChoice").value,book=bookCatalog[key];
+ $("bookCustomWrap").hidden=key!=="other";
+ var gradeName=grade===0?"Kindergarten":"Grade "+grade;
+ $("bookOnlineInfo").textContent=gradeName+" · "+book.title+". "+book.note;
+ var link=$("bookLoginLink");link.hidden=!book.url;
+ if(book.url){link.href=book.url;link.textContent=book.link}
+ $("bookStatus").textContent="";
+}
+function startBookHomework(withPhoto){
+ var key=$("bookChoice").value,book=bookCatalog[key],own=$("bookCustom").value.trim();
+ var title=key==="other"?(own||"my school book"):book.title;
+ var location=[];
+ [["Unit/Module/Week", "bookUnit"],["Lesson/Story","bookLesson"],["Page","bookPage"],["Problem","bookProblem"]].forEach(function(pair){
+  var value=$(pair[1]).value.trim();if(value)location.push(pair[0]+": "+value)
+ });
+ if(!location.length){
+  $("bookStatus").textContent="Add at least the lesson, week, page, or problem number so Buddy knows which assignment you mean.";
+  $("bookUnit").focus();return;
+ }
+ var intro="Book: "+title+"\nGrade: "+(grade===0?"Kindergarten":String(grade))+"\n"+location.join("\n")+"\n\nActual homework question: ";
+ $("subject").value=book.subject||"reading";
+ changeMode(withPhoto?"photo":"type");
+ $("assignment").value=intro;
+ $("entryStatus").textContent=withPhoto?
+  "Take a picture and scan the question. Check the words, then ask Buddy for help.":
+  "Book details added. Type or paste the ACTUAL question after the last line, then ask Buddy for help.";
+ $("bookStatus").textContent="Ready! Your book and lesson details have been filled into the homework box below.";
+ $("modeTitle").scrollIntoView({behavior:"smooth",block:"start"});
+ if(withPhoto)$("photoFile").focus({preventScroll:true});else $("assignment").focus({preventScroll:true});
+}
+$("bookChoice").onchange=showBookChoice;
+$("prepareBookBtn").onclick=function(){startBookHomework(false)};
+$("photoBookBtn").onclick=function(){startBookHomework(true)};
+
 $("schoolSubject").onchange=renderSchoolGuide;
-renderGrades();updateTopics();renderSchoolGuide();changeMode("type");
+renderGrades();updateTopics();renderSchoolGuide();showBookChoice();changeMode("type");
 })();
 </script>
 </body>
