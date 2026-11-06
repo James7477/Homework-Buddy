@@ -35,6 +35,31 @@ footer{color:#66738d;text-align:center;font-size:12px;padding:10px 0 28px;line-h
   <div class="hero"><div><div class="eyebrow">Hi, Buddy! 👋</div><h1>What homework did your teacher give you today?</h1><p>Show Buddy your real assignment. We'll work through it together, one step at a time. No rushing, no guessing, and no giving up!</p></div><div class="owl" aria-hidden="true">🦉</div></div>
   <div class="banner"><strong>Made for Alabama K–5 learners.</strong> Homework comes first, and the original practice games are still available. This is an early test—not a school-approved textbook or a live AI tutor.</div>
   <section class="card" aria-labelledby="gradeTitle"><div class="eyebrow">Step 1</div><h2 id="gradeTitle"><span class="step">1</span>What grade are you in?</h2><div id="grades" class="grade-grid" role="group" aria-label="Choose grade"></div></section>
+
+  <section class="card" aria-labelledby="schoolGuideTitle" id="schoolGuide">
+    <div class="eyebrow">Mobile County Public Schools · Curriculum guide</div>
+    <h2 id="schoolGuideTitle">🏫 What does my grade learn?</h2>
+    <p class="muted small">Browse programs listed in MCPSS's publicly posted 2024 K–5 curriculum and explore grade-appropriate learning topics. These are examples of learning skills, <strong>not this week's assignments</strong>. Teachers may use additional materials or different schedules.</p>
+    <label for="schoolSubject">Pick a subject to explore</label>
+    <select class="field" id="schoolSubject">
+      <option value="math">🔢 Math</option>
+      <option value="reading">📖 Reading</option>
+      <option value="spelling">✏️ Spelling &amp; Writing</option>
+      <option value="science">🔬 Science</option>
+      <option value="social">🌎 Social Studies</option>
+    </select>
+    <div class="questionBox" style="margin-top:16px">
+      <b id="schoolGuideGrade">Grade 2 learning guide</b>
+      <p id="schoolProgram" style="font-size:19px"></p>
+      <p class="muted small" id="schoolStandard" style="font-size:13px;font-weight:600;margin-top:8px"></p>
+    </div>
+    <p class="muted" style="margin:15px 0 6px"><strong>Skills to explore</strong> · Tap one to ask Buddy for help</p>
+    <div class="pickops" id="schoolTopics" aria-label="Choose a suggested learning skill"></div>
+    <p class="small muted">For exact assignments and lesson numbers, use your teacher's instructions or authorized school portal.</p>
+    <div class="actions"><a class="back" href="https://www.mcpss.com/documents/departments/academic-department/curriculum/780207" target="_blank" rel="noopener noreferrer">MCPSS curriculum documents ↗</a><a class="back" href="https://alabamalearningexchange.org/courses" target="_blank" rel="noopener noreferrer">Alabama grade standards ↗</a></div>
+    <p class="small muted" style="margin:12px 0 0">Source: MCPSS's posted 2024 elementary curriculum documents and the Alabama Learning Exchange. This app is independent, not affiliated with or endorsed by MCPSS.</p>
+  </section>
+
   <section class="card" aria-labelledby="modeTitle"><div class="eyebrow">Step 2</div><h2 id="modeTitle"><span class="step">2</span>How would you like to show Buddy?</h2>
     <div class="mode-grid" role="group" aria-label="How to enter homework">
       <button class="mode" data-mode="type" aria-pressed="true" type="button"><b>⌨️</b>Type it<small>Write the question</small></button>
@@ -81,6 +106,48 @@ var topics={
 5:[["math","Decimals and fractions"],["math","Volume and measurement"],["reading","Compare ideas in texts"],["spelling","Opinion writing"],["science","Earth and space"],["social","U.S. history and geography"]]
 };
 var subjectLabels={math:"math",reading:"reading",spelling:"spelling",science:"science",social:"social studies"};
+
+var schoolPrograms={
+ math:{name:"HMH Into Math",detail:"MCPSS-listed core mathematics curriculum"},
+ reading:{name:"Open Court Reading",detail:"MCPSS-listed reading and English language arts curriculum"},
+ spelling:{name:"Open Court Reading",detail:"Reading and language arts; K–3 teachers also have Phonics First support"},
+ science:{name:"STEMscopes",detail:"MCPSS-listed K–6 science curriculum"},
+ social:{name:"Studies Weekly Social Studies",detail:"MCPSS-listed K–6 primary social studies curriculum"}
+};
+var guideCodes={math:"MA19",reading:"ELA21",spelling:"ELA21",science:"SC23",social:"SS24"};
+var guideLabels={math:"Mathematics (2019)",reading:"English language arts (2021)",spelling:"English language arts (2021)",science:"Science (2023)",social:"Social studies (2024)"};
+var socialTitles=[
+ "Living and Working Together in Family and Community",
+ "Living and Working Together in Community and State",
+ "Living and Working Together in State and Nation",
+ "Alabama in American History and Government I: Geography and Settlement",
+ "Alabama in American History and Government II: Colonies to 1900",
+ "Alabama in American History and Government III: Twentieth Century to Present"
+];
+function renderSchoolGuide(){
+ var subject=$("schoolSubject").value;
+ var program=schoolPrograms[subject],key=guideCodes[subject]+(grade===0?".K":"."+grade);
+ $("schoolGuideGrade").textContent=(grade===0?"Kindergarten":"Grade "+grade)+" · "+guideLabels[subject];
+ $("schoolProgram").textContent="Classroom program: "+program.name;
+ var standard="Alabama's grade-level standards code: "+key+". "+program.detail+".";
+ if(subject==="social")standard+=" Grade focus: "+socialTitles[grade]+".";
+ $("schoolStandard").textContent=standard;
+ var list=$("schoolTopics");list.replaceChildren();
+ topics[grade].filter(function(row){return row[0]===subject}).forEach(function(item){
+  var button=document.createElement("button");
+  button.type="button";button.textContent=item[1];
+  button.style.fontSize="14px";button.style.fontWeight="850";
+  button.onclick=function(){
+   changeMode("lesson");
+   $("subject").value=subject;
+   $("assignment").value="I am working on "+item[1]+". Please explain it step by step and give me a small example to try.";
+   $("modeTitle").scrollIntoView({behavior:"smooth",block:"start"});
+   $("assignment").focus({preventScroll:true});
+  };
+  list.appendChild(button);
+ });
+}
+
 var coachTips={
 math:["Read the question one more time. What is it asking you to find?","Underline the numbers. Which math idea could connect them?","Draw a picture, count with objects, or write a number sentence to show your plan."],
 reading:["Read the whole question first. Then find the part of the story that helps.","Who or what is this about? What happened in the text?","Find a sentence or detail from the passage to support your answer."],
@@ -92,7 +159,7 @@ function saveGrade(){try{localStorage.setItem("homeworkBuddy_homeworkTest_grade"
 try{var raw=localStorage.getItem("homeworkBuddy_homeworkTest_grade");if(raw!==null){var stored=Number(raw);if(Number.isInteger(stored)&&stored>=0&&stored<=5)grade=stored}}catch(e){}
 function renderGrades(){
  $("grades").replaceChildren();
- for(var g=0;g<=5;g++){(function(n){var b=document.createElement("button");b.type="button";b.className="grade";b.textContent=n===0?"Kindergarten":"Grade "+n;b.setAttribute("aria-pressed",String(grade===n));b.onclick=function(){grade=n;saveGrade();renderGrades();updateTopics()};$("grades").appendChild(b)})(g)}
+ for(var g=0;g<=5;g++){(function(n){var b=document.createElement("button");b.type="button";b.className="grade";b.textContent=n===0?"Kindergarten":"Grade "+n;b.setAttribute("aria-pressed",String(grade===n));b.onclick=function(){grade=n;saveGrade();renderGrades();updateTopics();renderSchoolGuide()};$("grades").appendChild(b)})(g)}
 }
 function updateTopics(){
  var list=$("topic");list.replaceChildren();
@@ -282,7 +349,8 @@ $("readBtn").onclick=function(){
  var text=$("hintPanel").hidden?$("coachIntro").textContent:$("hintPanel").textContent;
  try{window.speechSynthesis.cancel();var msg=new SpeechSynthesisUtterance(text);msg.lang="en-US";msg.rate=.9;window.speechSynthesis.speak(msg)}catch(e){}
 };
-renderGrades();updateTopics();changeMode("type");
+$("schoolSubject").onchange=renderSchoolGuide;
+renderGrades();updateTopics();renderSchoolGuide();changeMode("type");
 })();
 </script>
 </body>
